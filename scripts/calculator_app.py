@@ -1,7 +1,7 @@
-from calculator_app_class import CalculatorApp
+from calculator_GUI_class import CalculatorProgram
 from tkinter import *
 
 if __name__ == "__main__":
-    calculator = Tk()
-    calculator_app = CalculatorApp(calculator)
-    calculator.mainloop()
+    root = Tk()
+    calculator_program = CalculatorProgram(root)
+    root.mainloop()
