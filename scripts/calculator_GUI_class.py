@@ -63,7 +63,7 @@ class CalculatorProgram:
         history = Button(self.extra_buttons_frame, text="O", bg="#252728", fg="#f1b062", relief=FLAT, font=("Arial Rounded MT Bold", 20, "bold"))
         history.pack(side=LEFT, padx=10, pady=10)
 
-        delete = Button(self.extra_buttons_frame, text="<", bg="#252728", fg="#f1b062", relief=FLAT, font=("Arial Rounded MT Bold", 20, "bold"))
+        delete = Button(self.extra_buttons_frame, text="<", bg="#252728", fg="#f1b062", relief=FLAT, font=("Arial Rounded MT Bold", 20, "bold"), command=self.remove_last_input)
         delete.pack(side=RIGHT, padx=10, pady=10)
     
     def initialize_buttons(self):
@@ -86,8 +86,6 @@ class CalculatorProgram:
             command = self.clear_all
         elif button_char == "=":
             command = self.evaluate
-        elif button_char == "±":
-            pass
         else:
             command = lambda ch=button_char: self.display_text(ch)
         
@@ -108,11 +106,33 @@ class CalculatorProgram:
         return color
     
     def display_text(self, char):
-        if self.input_display_text.get() == "" and char in ["()", "%", "x", "+", "-", "/"]:
-            pass
+        input_to_display = self.input_display_text.get()
+
+        if char == "()":
+            char = self.insert_parenthesis(input_to_display)
+
+        if not input_to_display:
+            if char in "x%+-/":
+                return
         else:
-            input_to_display = self.input_display_text.get()
-            self.input_display_text.set(input_to_display + str(char))
+            if input_to_display[-1] in "x%+-/." and char in "x%+-/.":
+                return
+            
+            if (input_to_display[-1].isdigit() and char == "(") or (input_to_display[-1] == ")" and char.isdigit()) or (input_to_display[-1] == ")" and char == "("):
+                input_to_display += "x"
+
+        self.input_display_text.set(input_to_display + str(char))
+    
+    def insert_parenthesis(self, input_to_display):
+        open_parenthesis_count = input_to_display.count("(")
+        close_parenthesis_count = input_to_display.count(")")
+
+        if not input_to_display or input_to_display[-1] in "x%+-/(":
+            return "("
+        elif open_parenthesis_count > close_parenthesis_count:
+            return ")"
+        else:
+            return "("
     
     def clear_all(self):
         self.input_display_text.set("")
@@ -124,3 +144,7 @@ class CalculatorProgram:
         if input_to_calculate != "":
             result = CalculatorLogic.calculate(input_to_calculate)
             self.output_display_text.set(result)
+    
+    def remove_last_input(self):
+        current_input = self.input_display_text.get()
+        self.input_display_text.set(current_input[:-1])
