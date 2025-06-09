@@ -6,4 +6,6 @@ A basic calculator program made with Python and Tkinter.
 
 
 ## v0.1-alpha
-
+- Complete calculator button layout.
+- Working buttons and text display.
+- "Clear text" functionality.
