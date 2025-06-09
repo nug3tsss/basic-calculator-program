@@ -1,4 +1,4 @@
-# basic calculator program (v0.2-alpha)
+# BASIC CALCULATOR PROGRAM (v0.3-alpha)
 
 A basic calculator program made with Python and Tkinter.
 
